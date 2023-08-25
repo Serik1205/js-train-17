@@ -149,9 +149,13 @@ function checkRegexFlags(regex) {
 	// Отримуємо всі флаги регулярного виразу.
 	// Перевіряємо наявність флагів 'g' та 'm' за допомогою методу `includes`.
 	// Повертаємо  - true, якщо флаги 'g' та 'm' присутні, інакше - false
-	const flag = regex.flags;
-	flag.includes('g', 'm');
-	return true;
+	const flags = regex.flags;
+	const hasGlobalFlag = flags.includes("g");
+	const hasMultilineFlag = flags.includes("m");
+
+	// Повертаємо  - true, якщо флаги 'g' та 'm' присутні, інакше - false
+
+	return hasGlobalFlag && hasMultilineFlag;
 }
 
 // Перевірка
@@ -176,7 +180,7 @@ function replaceWordOccurrences(str, word, newWord) {
 	// Заміняємо всі входження слова у рядку на нове слово.
 	// Повертаємо результат
 	const regex = new RegExp("word", "g");
-	let replaceText = str.replace(word, newWord);
+	let replaceText = str.replaceAll(word, newWord);
 	return replaceText;
 }
 
@@ -207,6 +211,14 @@ function checkFlags(regex) {
 	// Отримуємо вихідний код регулярного виразу за допомогою властивості `source`.
 	// Додаємо вихідний код до масиву
 	// Повертаємо масив використаних флагів.
+	let usedFlags = [];
+	const hasIgnoreCase = regex.ignoreCase;
+	if (hasIgnoreCase) {
+		usedFlags.push("ignoreCase");
+	}
+	const sourceCode = regex.source;
+	usedFlags.push(sourceCode);
+	return usedFlags;
 }
 
 // Приклад використання:
@@ -229,6 +241,18 @@ function checkRegexMethods(regex) {
 	// Перевіряємо, чи використовується метод `multiline`.
 	// Перевіряємо, чи використовується метод `sticky`.
 	// Повертаємо масив використаних методів.
+	const usedMethods = [];
+	if (regex.dotAll) {
+		usedMethods.push("dotAll");
+	}
+	if (regex.multiline) {
+		usedMethods.push("multiline");
+	}
+	if (regex.sticky) {
+		usedMethods.push("sticky");
+	}
+	return usedMethods;
+
 }
 
 // Приклад використання:
@@ -249,6 +273,9 @@ console.log(checkRegexMethods(/test/msy));
 function findWord(str, word) {
 	// Створення регулярного виразу для пошуку слова.
 	// Використання методу `search` для пошуку першого входження слова.
+	const regex = new RegExp(word);
+	const index = str.search(regex);
+	return index;
 }
 
 // Приклад використання:
